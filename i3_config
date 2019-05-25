@@ -1,0 +1,199 @@
+# i3 config file:
+
+# set mod var to win key
+
+set $mod Mod4
+
+# workspace name vars
+
+set $ws1 "1: Terminal "
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9: Spotify "
+set $ws10 "10: Discord "
+
+# monitor vars
+
+set $monitor1 'DVI-I-1'
+set $monitor2 'DP-0'
+set $monitor3 'HDMI-0'
+
+# configure displays
+
+exec xrandr --output $monitor1 --primary --mode 1920x1080 --rate 144.00 --output $monitor3 --right-of $monitor1 --mode 1920x1080 --rate 60.00 --output $monitor2 --left-of $monitor1 --mode 1920x1080 --rate 144.00
+
+# font for window titles
+
+font pango: DejaVu Sans Mono 13, FontAwesome 13
+
+# set wallpaper
+
+exec_always feh --bg-scale /home/intronix/Pictures/Wallpaper.png
+
+# remove title bars / change border
+
+for_window [class="^.*"] border pixel 5
+
+# compton
+
+exec --no-startup-id compton
+
+# gaps
+
+gaps inner 15
+gaps outer 15
+
+# change keyboard layout and swap lalt/lwin
+
+exec --no-startup-id /home/intronix/.scripts/i3_start.sh
+
+# keybindings
+
+# mouse + mod to drag floating windows
+floating_modifier $mod
+
+# start a terminal
+
+bindsym $mod+Return exec i3-sensible-terminal
+
+# kill focused window
+
+bindsym $mod+q kill
+
+# start dmenu
+
+bindsym $mod+d exec dmenu_run
+
+# change focus
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# toggle split direction
+
+bindsym $mod+t split toggle
+
+# fullscreen the focused container
+
+bindsym $mod+f fullscreen toggle
+
+# toggle tiling / floating
+
+bindsym $mod+dead_circumflex floating toggle
+
+# change focus tiling / floating
+
+bindsym $mod+Shift+dead_circumflex focus mode_toggle
+
+# switch to workspace
+
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# move focused container to workspace
+
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# restart i3
+
+bindsym $mod+Ctrl+r restart
+
+# restart pc
+
+bindsym $mod+Shift+F4 exec systemctl reboot
+
+# shutdown pc
+
+bindsym $mod+F4 exec systemctl poweroff
+
+# move workspace to another monitor
+
+bindsym $mod+Ctrl+z move workspace to output left
+bindsym $mod+Ctrl+o move workspace to output right
+
+# resize
+
+# resize container
+
+bindsym $mod+z resize grow width 1 px or 1 ppt
+bindsym $mod+u resize shrink height 1 px or 1 ppt
+bindsym $mod+i resize grow height 1 px or 1 ppt
+bindsym $mod+o resize shrink width 1 px or 1 ppt
+
+# resize gaps
+
+bindsym $mod+Shift+z gaps inner current plus 1
+bindsym $mod+Shift+o gaps inner current minus 1
+bindsym $mod+Shift+u gaps outer current plus 1
+bindsym $mod+Shift+i gaps outer current minus 1
+
+# reset gaps
+
+bindsym $mod+g gaps inner current set 15; gaps outer current set 15 
+
+# no gaps at all
+
+bindsym $mod+Shift+g gaps inner current set 0; gaps outer current set 0
+
+# sticky
+
+bindsym $mod+s sticky toggle
+
+# music
+
+bindsym $mod+p exec playerctl pause
+bindsym $mod+Shift+p exec playerctl play
+bindsym $mod+n exec playerctl next
+bindsym $mod+Shift+n exec playerctl previous 
+
+# open specific programs
+
+bindsym $mod+Shift+s exec --no-startup-id spotify
+bindsym $mod+Shift+f exec --no-startup-id firefox
+bindsym $mod+Shift+d exec --no-startup-id discord
+bindsym $mod+Shift+r exec urxvt -hold -e ranger
+bindsym $mod+Shift+v exec urxvt -hold -e vis
+
+# assing programs to workspace
+
+assign [class=Spotify] $ws9
+assign [class=discord] $ws10
+
+# bar config
+
+bar {
+	status_command i3status
+	position top
+}
+
