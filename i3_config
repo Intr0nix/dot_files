@@ -6,7 +6,7 @@ set $mod Mod4
 
 # workspace name vars
 
-set $ws1 "1: Terminal "
+set $ws1 "1: Terminal"
 set $ws2 "2"
 set $ws3 "3"
 set $ws4 "4"
@@ -14,14 +14,14 @@ set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
-set $ws9 "9: Spotify "
-set $ws10 "10: Discord "
+set $ws9 "9: Spotify"
+set $ws10 "10: Discord"
 
 # monitor vars
 
 set $monitor1 'DVI-I-1'
-set $monitor2 'DP-0'
-set $monitor3 'HDMI-0'
+set $monitor2 'DP-1'
+set $monitor3 'HDMI-1'
 
 # configure displays
 
@@ -31,13 +31,17 @@ exec xrandr --output $monitor1 --primary --mode 1920x1080 --rate 144.00 --output
 
 font pango: DejaVu Sans Mono 13, FontAwesome 13
 
+# start Polybar
+
+exec_always --no-startup-id /home/intronix/.scripts/launch_polybar.sh
+
 # set wallpaper
 
 exec_always feh --bg-scale /home/intronix/Pictures/Wallpaper.png
 
 # remove title bars / change border
 
-for_window [class="^.*"] border pixel 5
+for_window [class="^.*"] border pixel 3 
 
 # compton
 
@@ -45,21 +49,29 @@ exec --no-startup-id compton
 
 # gaps
 
-gaps inner 15
-gaps outer 15
+gaps inner 0
+gaps outer 0
 
-# change keyboard layout and swap lalt/lwin
+# swap lalt/lwin
 
-exec --no-startup-id /home/intronix/.scripts/i3_start.sh
+exec --no-startup-id /home/intronix/.scripts/swap_keys.sh
 
 # keybindings
+
+# default screen config
+
+bindsym $mod+F12 exec xrandr --output $monitor1 --primary --mode 1920x1080 --rate 144.00 --output $monitor3 --right-of $monitor1 --mode 1920x1080 --rate 60.00 --output $monitor2 --left-of $monitor1 --mode 1920x1080 --rate 144.00
+
+# screens for discord screenshare
+
+bindsym $mod+F11 exec xrandr --output $monitor1 --mode 1920x1080 --rate 144.00 --output $monitor2 --off --output $monitor3 --off
 
 # mouse + mod to drag floating windows
 floating_modifier $mod
 
 # start a terminal
 
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec termite
 
 # kill focused window
 
@@ -139,21 +151,21 @@ bindsym $mod+F4 exec systemctl poweroff
 
 # move workspace to another monitor
 
-bindsym $mod+Ctrl+z move workspace to output left
+bindsym $mod+Ctrl+y move workspace to output left
 bindsym $mod+Ctrl+o move workspace to output right
 
 # resize
 
 # resize container
 
-bindsym $mod+z resize grow width 1 px or 1 ppt
+bindsym $mod+y resize grow width 1 px or 1 ppt
 bindsym $mod+u resize shrink height 1 px or 1 ppt
 bindsym $mod+i resize grow height 1 px or 1 ppt
 bindsym $mod+o resize shrink width 1 px or 1 ppt
 
 # resize gaps
 
-bindsym $mod+Shift+z gaps inner current plus 1
+bindsym $mod+Shift+y gaps inner current plus 1
 bindsym $mod+Shift+o gaps inner current minus 1
 bindsym $mod+Shift+u gaps outer current plus 1
 bindsym $mod+Shift+i gaps outer current minus 1
@@ -184,16 +196,9 @@ bindsym $mod+Shift+f exec --no-startup-id firefox
 bindsym $mod+Shift+d exec --no-startup-id discord
 bindsym $mod+Shift+r exec urxvt -hold -e ranger
 bindsym $mod+Shift+v exec urxvt -hold -e vis
+bindsym $mod+Shift+c exec urxvt -hold -e calcurse
 
 # assing programs to workspace
 
 assign [class=Spotify] $ws9
 assign [class=discord] $ws10
-
-# bar config
-
-bar {
-	status_command i3status
-	position top
-}
-
