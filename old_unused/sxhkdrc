@@ -1,0 +1,83 @@
+# terminal emulator
+super + Return
+	st
+
+# program launcher
+super + d
+	dmenu_run
+
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd
+
+# sound
+super + {m, comma, period}
+    amixer set Master -q {toggle, 10%-, 10%+}
+
+# music
+super + {p, shift + p, o, n, shift + n}
+    mpc {toggle, stop, repeat, next, prev}
+
+# quit/restart bspwm
+super + alt + r
+    pkill monitors;\
+	bspc wm -r
+
+# shutdown/reboot
+super + {F3, F4}
+    confirm {reboot, poweroff}
+
+# close
+super + q
+    bspc node -c
+
+# start programs
+
+super + shift + e
+    surf -a "a" -dg duckduckgo.com
+
+super + shift + d
+    discord
+
+super + shift + f
+    firefox
+
+super + shift + r
+    urxvt -e ranger
+
+super + shift + v
+    st -e vis
+
+super + shift + m
+    st -e ncmpcpp
+
+super + shift + q
+    qutebrowser &;\
+    feh $HOME/Pictures/cheatsheet-qutebrowser.png
+
+super + shift + c
+    st -e calcurse
+
+# swap keyboard layout
+super + ctrl + l
+    swap_layout
+
+# focus the node in the given direction
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+
+# focus or send to the given desktop
+super + {_,shift + }{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}
+	bspc {desktop -f,node -d} {d1, d2, d3, d4, d5, d6, d7, d8, d9, d10}
+
+# toggle states
+super + {f, t, y}
+    bspc node -t "~{fullscreen,pseudo_tiled,tiled}"
+
+# toggle flags
+super + s
+    bspc node -g sticky
+
+# gaps
+super + {_,shift + }g
+    bspc config window_gap {7,0}

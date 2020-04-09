@@ -1,0 +1,49 @@
+#! /bin/sh
+
+killall -qu intronix monitors &
+killall -qu intronix sxhkd &
+picom &
+feh --bg-scale $HOME/Pictures/forest_orange.jpg &
+setxkbmap -option altwin:swap_lalt_lwin
+
+monitors=$(bspc query -M --names)
+if [[ $(bspc query -D | wc -l) -lt 10 ]]; then
+    lmon="eDP-1"
+    pmon=$lmon
+
+    for monitor in $monitors;
+    do
+        if [[ ! $monitor == $lmon ]]; then
+            pmon=$monitor
+        fi
+    done
+
+    if [[ ! $pmon == $lmon ]]; then
+        xrandr --output $pmon --primary --output $lmon --off
+    fi
+    bspc monitor $pmon -d d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
+fi
+
+$HOME/.scripts/launch_polybar $monitors &
+
+bspc config border_width            2
+bspc config window_gap              7
+
+bspc config remove_unplugged_monitors   true
+bspc config remove_disabled_monitors    true
+
+bspc config single_monocle              true
+bspc config borderless_monocle          true
+bspc config gapless_monocle             true
+
+bspc rule -a Surf:surf state=tiled
+
+$HOME/.scripts/monitors &
+mpc random
+xset -b
+xset s off -dpms
+[ ! -s ~/.config/mpd/pid ] && mpd &
+xbanish &
+/usr/bin/dunst &
+sxhkd &
+bspc monitor $pmon -d d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
